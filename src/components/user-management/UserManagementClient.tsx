@@ -100,6 +100,7 @@ export function UserManagementClient() {
     setForm({
       full_name: user.full_name,
       email: user.email,
+      password: "",
       role: user.role,
       department: user.department,
       status: user.status,
