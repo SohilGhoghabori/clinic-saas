@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect,useCallback useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   Bell,
@@ -110,22 +110,23 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
     window.addEventListener("mousedown", onClickOutside);
     return () => window.removeEventListener("mousedown", onClickOutside);
   }, []);
-  useEffect(() => {
-    if (searchParams.get("q")) {
-      applySearch(searchParams.get("q") || "");
-    }
-  }, [searchParams, applySearch]);
-  function applySearch(query: string) {
-    const params = new URLSearchParams(searchParams.toString());
-    if (query.trim()) {
-      params.set("q", query.trim());
-    } else {
-      params.delete("q");
-    }
-    const next = params.toString();
-    router.replace(next ? `${pathname}?${next}` : pathname);
+  const applySearch = useCallback((query: string) => {
+  const params = new URLSearchParams(searchParams.toString());
+
+  if (query.trim()) {
+    params.set("q", query.trim());
+  } else {
+    params.delete("q");
   }
 
+  const next = params.toString();
+  router.replace(next ? `${pathname}?${next}` : pathname);
+}, [searchParams, router, pathname]);
+useEffect(() => {
+  if (searchParams.get("q")) {
+    applySearch(searchParams.get("q") || "");
+  }
+}, [searchParams, applySearch]);
   useEffect(() => {
     const timer = window.setTimeout(() => {
       const current = (searchParams.get("q") ?? "").trim();
