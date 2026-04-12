@@ -110,7 +110,11 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
     window.addEventListener("mousedown", onClickOutside);
     return () => window.removeEventListener("mousedown", onClickOutside);
   }, []);
-
+  useEffect(() => {
+    if (searchParams.get("q")) {
+      applySearch(searchParams.get("q") || "");
+    }
+  }, [searchParams, applySearch]);
   function applySearch(query: string) {
     const params = new URLSearchParams(searchParams.toString());
     if (query.trim()) {

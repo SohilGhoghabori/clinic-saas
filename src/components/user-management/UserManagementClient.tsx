@@ -60,14 +60,14 @@ export function UserManagementClient() {
   }
 
   useEffect(() => {
-    void loadAll();
-    const reload = () => {
-      void loadAll();
-    };
+    loadAll();
+  
+    const reload = () => loadAll();
+  
     window.addEventListener("clinic-changed", reload);
+  
     return () => window.removeEventListener("clinic-changed", reload);
-  }, []);
-
+  }, [loadAll]);
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSubmitting(true);

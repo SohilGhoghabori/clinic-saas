@@ -97,12 +97,22 @@ export function AppointmentsClient() {
   }
 
   useEffect(() => {
-    void loadAll();
-    const reload = () => {
-      void loadAll();
-    };
+    async function loadAll() {
+      await fetchPatients();
+      await fetchAppointments();
+    }
+  
+    function reload() {
+      loadAll();
+    }
+  
+    loadAll();
+  
     window.addEventListener("clinic-changed", reload);
-    return () => window.removeEventListener("clinic-changed", reload);
+  
+    return () => {
+      window.removeEventListener("clinic-changed", reload);
+    };
   }, []);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
