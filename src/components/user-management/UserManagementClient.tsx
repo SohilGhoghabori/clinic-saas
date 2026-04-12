@@ -106,7 +106,7 @@ export function UserManagementClient() {
       status: user.status,
     });
   }
-
+// trigger deploy
   async function handleDelete(id: string) {
     if (!window.confirm("Delete this user?")) return;
     const res = await fetch(`/api/users?id=${encodeURIComponent(id)}`, {
