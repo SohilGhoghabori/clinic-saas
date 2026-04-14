@@ -110,23 +110,25 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
     window.addEventListener("mousedown", onClickOutside);
     return () => window.removeEventListener("mousedown", onClickOutside);
   }, []);
+
   const applySearch = useCallback((query: string) => {
-  const params = new URLSearchParams(searchParams.toString());
-
-  if (query.trim()) {
-    params.set("q", query.trim());
-  } else {
-    params.delete("q");
-  }
-
-  const next = params.toString();
-  router.replace(next ? `${pathname}?${next}` : pathname);
-}, [searchParams, router, pathname]);
+    const params = new URLSearchParams(searchParams.toString());
+  
+    if (query.trim()) {
+      params.set("q", query.trim());
+    } else {
+      params.delete("q");
+    }
+  
+    const next = params.toString();
+    router.replace(next ? `${pathname}?${next}` : pathname);
+  }, [searchParams, router, pathname]);
 useEffect(() => {
-  if (searchParams.get("q")) {
-    applySearch(searchParams.get("q") || "");
+  const q = searchParams.get("q");
+  if (q) {
+    applySearch(q);
   }
-}, [searchParams, applySearch]);
+}, [searchParams, applySearch]); // ✅ MUST include applySearch
   useEffect(() => {
     const timer = window.setTimeout(() => {
       const current = (searchParams.get("q") ?? "").trim();
