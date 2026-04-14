@@ -123,12 +123,13 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
     const next = params.toString();
     router.replace(next ? `${pathname}?${next}` : pathname);
   }, [searchParams, router, pathname]);
+// eslint-disable-next-line react-hooks/exhaustive-deps
 useEffect(() => {
   const q = searchParams.get("q");
   if (q) {
     applySearch(q);
   }
-}, [searchParams, applySearch]); // ✅ MUST include applySearch
+}, [searchParams]);// ✅ MUST include applySearch
   useEffect(() => {
     const timer = window.setTimeout(() => {
       const current = (searchParams.get("q") ?? "").trim();
